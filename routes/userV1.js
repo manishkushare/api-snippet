@@ -3,7 +3,7 @@ var router = express.Router();
 var User = require('../models/UserV2');
 var auth = require("../middlewares/auth");
 
-router.post('/', async (req,res,next)=> {
+router.post('/signup', async (req,res,next)=> {
   try {
       const user = await User.create(req.body);
       console.log(user);
@@ -46,10 +46,22 @@ router.post('/login', async (req,res,next)=> {
           })
       };
       const token = await user.signToken();
+      console.log(token);
       res.json({user : await user.userJSON(token)});
   } catch (error) {
+      console.log(error);
       next(error);
   }
+});
+
+router.get('/', auth.verifyToken, async (req,res,next)=> {
+    console.log(req.user,"ihwreklfhklejrgklj");
+    try {
+        return res.json({user: req.user});
+    } catch (error) {
+
+        next(error);
+    }
 });
 
 router.get('/bookmarks',auth.verifyToken, async (req,res,next)=> {

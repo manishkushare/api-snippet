@@ -41,6 +41,8 @@ router.post("/:id/bookmark", auth.verifyToken, async (req, res, next) => {
       { $addToSet: { bookmark: snippet.id } } ,
       { new: true }
     );
+    currentUser.token = req.user.token;
+    console.log(currentUser,"sdsd");
     res.json({ user: await user.userJSON(currentUser.token) });
   } catch (error) {
     next(error);
